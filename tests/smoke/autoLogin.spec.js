@@ -1,18 +1,12 @@
 import {test, expect} from '@playwright/test';
+import { LoginPage } from '../../pages/LoginPage';
 
 test ('Login automatically using username & password from page', async ({ page }) => {
-    await page.goto('/');
+    const loginPage = new LoginPage(page);
+    await loginPage.goto('/');
 
     await page.waitForSelector('#login_credentials, .login_credentials');
     await page.waitForSelector('#login_password, .login_password');
-
-    const usernameField = page.locator('#user-name');
-
-    const passwordField = page.locator('#password');
-
-    const loginButton = page.locator('#login-button');
-
-    const bodyText = await page.textContent('body');
 
     const usernamesText = await page.locator('#login_credentials, .login_credentials').first().innerText();
 
@@ -25,9 +19,9 @@ test ('Login automatically using username & password from page', async ({ page }
 
     const username = usernames.find(u => u.includes('standard')) ?? usernames[0];
 
-    await usernameField.fill(username);
-    await passwordField.fill(password);
-    await loginButton.click();
+    await loginPage.usernameInput.fill(username);
+    await loginPage.passwordInput.fill(password);
+    await loginPage.loginButton.click();
 
     await expect(page).toHaveURL(/inventory.html/);
 
