@@ -1,5 +1,5 @@
 import {test, expect} from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage';
+import { LoginPage } from '../../../pages/LoginPage';
 
 test ('IncorrectLogin', async ({ page }) => {
     const loginPage = new LoginPage(page);
@@ -9,5 +9,6 @@ test ('IncorrectLogin', async ({ page }) => {
     await loginPage.passwordInput.fill('secret');
     await loginPage.loginButton.click();
     await expect (loginPage.errorMessage).toBeVisible();
+    await expect(page).toHaveURL('/');
 }
 )
